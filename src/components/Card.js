@@ -5,15 +5,16 @@ const Card = (props) => {
   const {
     title,
     date,
-    thumbnailUrl
+    thumbnailUrl,
+    url
   } = props;
 
   return (
-    <div className={styles.card2} tabIndex={0}>
+    <a className={styles.card2} tabIndex={0} href={url}>
       <img loading={'lazy'} src={thumbnailUrl}/>
       <div className={styles.cardOpacity}></div>
       <span>{date} {title}</span>
-    </div>
+    </a>
   );
 }
 
