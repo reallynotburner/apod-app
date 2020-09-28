@@ -1,10 +1,8 @@
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
+import getApolloClient from '../src/utils/apollo';
 import '../styles/globals.css';
 
-const client = new ApolloClient({
-  uri: process.env.graphQlEndpoint,
-  cache: new InMemoryCache()
-});
+const client = getApolloClient();
 
 function MyApp({ Component, pageProps }) {
   return (

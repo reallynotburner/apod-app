@@ -1,7 +1,8 @@
-import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 // import { gql, useQuery } from '@apollo/client';
 import Head from 'next/head';
 import Card from '../src/components/Card';
+import getApolloClient from '../src/utils/apollo';
 import styles from '../styles/Home.module.css';
 
 const INITIAL_HOME_QUERY = gql`
@@ -56,10 +57,7 @@ export async function getStaticProps() {
 }
 
 async function getData () {
-  const client = new ApolloClient({
-    uri: process.env.graphQlEndpoint,
-    cache: new InMemoryCache()
-  });
+  const client = getApolloClient();
 
   let errored = false;
 
