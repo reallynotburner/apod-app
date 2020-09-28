@@ -1,6 +1,7 @@
 import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
 // import { gql, useQuery } from '@apollo/client';
 import Head from 'next/head';
+import Card from '../src/components/Card';
 import styles from '../styles/Home.module.css';
 
 const INITIAL_HOME_QUERY = gql`
@@ -14,14 +15,16 @@ const INITIAL_HOME_QUERY = gql`
 `;
 
 export default function Home(props) {
-  const { initialData } = props;
-  console.log('HOME RENDER INITIAL DATA', initialData);
+  const { initialData } = props; // data from SSG
 
+  // fallback on client if SSG failed for some reason.
   const { loading, error, data } = useQuery(INITIAL_HOME_QUERY, {
-    skip: !!initialData
+    skip: !!initialData // if SSG got the data, we can skip the call to get Home data
   });
 
-  const pickData = data ? data : initialData?.data
+  console.log('Home Render!');
+
+  const pickData = data ? data : initialData?.data;
 
   return (
     <div className={styles.container}>
@@ -33,7 +36,9 @@ export default function Home(props) {
       {error ? <span>Ooops!</span> : null}
       {pickData ?
         (<div className={styles.resultContainer}>
-          {pickData.getRecordsByDateRange.map(event => (<div key={event.title}>{event.title}</div>))}
+          {pickData.getRecordsByDateRange.map(({ title, thumbnailUrl, date }, index) => {
+            return <Card key={`${index}-${title}`} thumbnailUrl={thumbnailUrl} date={date} title={title}/>
+          })}
         </div>)
         :
         null
@@ -43,8 +48,6 @@ export default function Home(props) {
 }
 
 export async function getStaticProps() {
-
-  
   return {
     props: {
       initialData: await getData()
