@@ -1,11 +1,11 @@
-import { gql, useQuery } from '@apollo/client';
+import { ApolloClient, gql, InMemoryCache, useQuery } from '@apollo/client';
+// import { gql, useQuery } from '@apollo/client';
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 
-
 const INITIAL_HOME_QUERY = gql`
   query InitialHomeQuery {
-    getRecordsByDateRange(beginDate: "2020-07-01", endDate: "2020-10-01") {
+    getRecordsByDateRange(beginDate: "2019-10-01", endDate: "2020-10-01", descending: true) {
       date
       title
       thumbnailUrl
@@ -13,10 +13,15 @@ const INITIAL_HOME_QUERY = gql`
   }
 `;
 
-export default function Home() {
-  const { loading, error, data } = useQuery(INITIAL_HOME_QUERY);
+export default function Home(props) {
+  const { initialData } = props;
+  console.log('HOME RENDER INITIAL DATA', initialData);
 
-  data && console.log(data);
+  const { loading, error, data } = useQuery(INITIAL_HOME_QUERY, {
+    skip: !!initialData
+  });
+
+  const pickData = data ? data : initialData?.data
 
   return (
     <div className={styles.container}>
@@ -26,13 +31,37 @@ export default function Home() {
       </Head>
       {loading ? <span>Loading...</span> : null}
       {error ? <span>Ooops!</span> : null}
-      {data ?
-        (<ul>
-          {data.getRecordsByDateRange.map(event => (<li>{event.title}</li>))}
-        </ul>)
+      {pickData ?
+        (<div className={styles.resultContainer}>
+          {pickData.getRecordsByDateRange.map(event => (<div key={event.title}>{event.title}</div>))}
+        </div>)
         :
         null
       }
     </div>
   )
+}
+
+export async function getStaticProps() {
+
+  
+  return {
+    props: {
+      initialData: await getData()
+    }
+  }
+}
+
+async function getData () {
+  const client = new ApolloClient({
+    uri: process.env.graphQlEndpoint,
+    cache: new InMemoryCache()
+  });
+
+  let errored = false;
+
+  const result = await client.query({ query: INITIAL_HOME_QUERY })
+    .catch(() => errored = true);
+
+  return errored ? null : result;
 }
