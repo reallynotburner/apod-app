@@ -1,4 +1,11 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Astronomy Picture of the Day App
+
+This is an app to explore the beautiful pictures, videos and apps that Nasa curates and shares with professionally written explanations of what you are seeing.  The data is scraped from the [APOD API](https://api.nasa.gov/planetary/apod) but hosted in my own database and thumnail creator.
+
+## Tools
+- [Next.js](https://nextjs.org/) React framework powers the server-side incremental static generation to allow for fast load time while still consuming dynamic data sources.
+- [Apollo + GraphQL](https://www.apollographql.com/) handles the API layer of the app.  This isolates the client app from the back-end data formats and data sources.
+- [MySql](https://www.mysql.com/) is on the back end, daily updates scraped from APOD are stored there for flexible, fast, industry standard data sourcing.
 
 ## Getting Started
 
@@ -20,11 +27,3 @@ To learn more about Next.js, take a look at the following resources:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
