@@ -3,12 +3,13 @@ import { gql, useQuery } from '@apollo/client';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import Card from '../src/components/Card';
-import getApolloClient from '../src/utils/apollo';
+import { getApolloServer } from '../src/utils/apollo';
 import styles from '../styles/Home.module.css';
+
 
 const INITIAL_HOME_QUERY = gql`
   query InitialHomeQuery {
-    getRecordsByDateRange(beginDate: "2019-10-01", endDate: "2020-10-01", descending: true) {
+    getRecordsByDateRange(beginDate: "2019-10-03", endDate: "2020-10-04", descending: true) {
       date
       title
       thumbnailUrl
@@ -56,7 +57,13 @@ export default function Home(props) {
       {pickData ?
         (<div className={styles.resultContainer}>
           {pickData.getRecordsByDateRange.map(({ title, thumbnailUrl, date, url }, index) => {
-            return <Card key={`${index}-${title}`} thumbnailUrl={thumbnailUrl} date={date} title={title} url={url}/>
+            return <Card
+              key={`${index}-${title}`}
+              thumbnailUrl={thumbnailUrl}
+              date={date}
+              title={title}
+              url={url}
+            />
           })}
         </div>)
         :
@@ -75,7 +82,7 @@ export async function getStaticProps() {
 }
 
 async function getData () {
-  const client = getApolloClient();
+  const client = getApolloServer();
 
   let errored = false;
 

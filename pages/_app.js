@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/client';
-import getApolloClient from '../src/utils/apollo';
+import { getApolloClient } from '../src/utils/apollo';
 import '../styles/globals.css';
 
 const client = getApolloClient();
