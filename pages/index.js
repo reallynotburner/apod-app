@@ -6,14 +6,20 @@ import Card from '../src/components/Card';
 import { getApolloServer } from '../src/utils/apollo';
 import styles from '../styles/Home.module.css';
 
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth();
 
 const INITIAL_HOME_QUERY = gql`
-  query InitialHomeQuery {
-    getRecordsByDateRange(beginDate: "2019-10-03", endDate: "2020-10-04", descending: true) {
-      date
-      title
-      thumbnailUrl
-      url
+  query GetSwimlanes ($year: Int, $month: Int, $limit: Int = 12) {
+    swimlanes: getRecordsPaginatedByMonth (year: $year, month: $month, limit: $limit){
+      month
+      year
+      days {
+        date
+        title
+        thumbnailUrl
+      }
     }
   }
 `;
@@ -29,12 +35,21 @@ function keydownHandler(event) {
   }
 }
 
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 export default function Home(props) {
   const { initialData } = props; // data from SSG
 
   // fallback on client if SSG failed for some reason.
   const { loading, error, data } = useQuery(INITIAL_HOME_QUERY, {
-    skip: !!initialData // if SSG got the data, we can skip the call to get Home data
+    skip: !!initialData, // if SSG got the data, we can skip the call to get Home data
+    variables: {
+      year: year,
+      month: month,
+      limit: 12
+    }
   });
 
   useEffect(() => {
@@ -42,9 +57,8 @@ export default function Home(props) {
     return () => window.removeEventListener('keydown', keydownHandler);
   }, [null]);
 
-  console.log('Home Render!');
-
   const pickData = data ? data : initialData?.data;
+  console.log('Home Render!');
 
   return (
     <div className={styles.container}>
@@ -56,15 +70,22 @@ export default function Home(props) {
       {error ? <span>Ooops!</span> : null}
       {pickData ?
         (<div className={styles.resultContainer}>
-          {pickData.getRecordsByDateRange.map(({ title, thumbnailUrl, date, url }, index) => {
-            return <Card
-              key={`${index}-${title}`}
-              thumbnailUrl={thumbnailUrl}
-              date={date}
-              title={title}
-              url={url}
-            />
-          })}
+          {pickData.swimlanes.map(({ month, year, days }) => (
+            <div>
+              <h1>{monthNames[month]} {year}</h1>
+              <ul>
+                {days.map(({ title, thumbnailUrl, date, url }, index) => {
+                  return <Card
+                    key={`${index}-${title}`}
+                    thumbnailUrl={thumbnailUrl}
+                    date={date}
+                    title={title}
+                    url={url}
+                  />
+                })}
+              </ul>
+            </div>
+          ))}
         </div>)
         :
         null
@@ -81,12 +102,19 @@ export async function getStaticProps() {
   }
 }
 
-async function getData () {
+async function getData() {
   const client = getApolloServer();
 
   let errored = false;
 
-  const result = await client.query({ query: INITIAL_HOME_QUERY })
+  const result = await client.query({
+    query: INITIAL_HOME_QUERY,
+    variables: {
+      year: year,
+      month: month,
+      limit: 12
+    }
+  })
     .catch(() => errored = true);
 
   return errored ? null : result;
