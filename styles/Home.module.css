@@ -2,10 +2,6 @@
   min-height: 100vh;
   width: 100vw;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   background: #333333;
 }
 
@@ -177,6 +173,14 @@
 
 .logo {
   height: 1em;
+}
+
+.swimlane {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
 }
 
 @media (max-width: 600px) {

@@ -19,6 +19,7 @@ const INITIAL_HOME_QUERY = gql`
         date
         title
         thumbnailUrl
+        url
       }
     }
   }
@@ -70,10 +71,10 @@ export default function Home(props) {
       {error ? <span>Ooops!</span> : null}
       {pickData ?
         (<div className={styles.resultContainer}>
-          {pickData.swimlanes.map(({ month, year, days }) => (
-            <div>
+          {pickData.swimlanes.map(({ month, year, days }, index) => (
+            <div key={index} >
               <h1>{monthNames[month]} {year}</h1>
-              <ul>
+              <ul className={styles.swimlane}>
                 {days.map(({ title, thumbnailUrl, date, url }, index) => {
                   return <Card
                     key={`${index}-${title}`}
