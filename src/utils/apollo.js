@@ -1,10 +1,15 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
-function getApolloClient () {
+export function getApolloClient () {
   return new ApolloClient({
-    uri: process.env.graphQlEndpoint,
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT_CLIENT,
     cache: new InMemoryCache()
   });
 }
 
-export default getApolloClient;
+export function getApolloServer () {
+  return new ApolloClient({
+    uri: process.env.NEXT_PUBLIC_GRAPHQL_API_ENDPOINT_SERVER,
+    cache: new InMemoryCache()
+  });
+}
