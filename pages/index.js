@@ -73,7 +73,7 @@ export default function Home(props) {
         (<div className={styles.resultContainer}>
           {pickData.swimlanes.map(({ month, year, days }, index) => (
             <div key={index} >
-              <h1>{monthNames[month]} {year}</h1>
+              <h1 className={styles.swimlaneTitle}>{monthNames[month]} {year}</h1>
               <ul className={styles.swimlane}>
                 {days.map(({ title, thumbnailUrl, date, url }, index) => {
                   return <Card

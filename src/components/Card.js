@@ -10,8 +10,8 @@ const Card = (props) => {
   } = props;
 
   return (
-    <a className={styles.card2} tabIndex={0} href={url}>
-      <img loading={'lazy'} src={thumbnailUrl}/>
+    <a className={styles.card} tabIndex={0} href={url}>
+      <img loading={'lazy'} src={thumbnailUrl} />
       <div className={styles.cardOpacity}></div>
       <span>{date} {title}</span>
     </a>
