@@ -99,7 +99,8 @@ export async function getStaticProps() {
   return {
     props: {
       initialData: await getData()
-    }
+    },
+    revalidate: 3600,
   }
 }
 
