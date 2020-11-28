@@ -96,7 +96,6 @@ export default function Home(props) {
 }
 
 export async function getStaticProps() {
-  console.log('getStaticProps');
   return {
     props: {
       initialData: await getData()
@@ -106,7 +105,6 @@ export async function getStaticProps() {
 }
 
 async function getData() {
-  console.log('getData - should only run on server');
   const client = getApolloServer();
 
   let errored = false;
