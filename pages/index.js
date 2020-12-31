@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
-// import { gql, useQuery } from '@apollo/client';
+import { withFocusable } from '@noriginmedia/react-spatial-navigation';
 import Head from 'next/head';
 import { useEffect } from 'react';
-import Card from '../src/components/Card';
+import Swimlane from '../src/components/Swimlane';
 import { getApolloServer } from '../src/utils/apollo';
 import styles from '../styles/Home.module.css';
 
@@ -25,6 +25,8 @@ const INITIAL_HOME_QUERY = gql`
   }
 `;
 
+const FocusableSwimlane = withFocusable()(Swimlane);
+
 // keyboard handler, right now just allows the "enter" key to emit a click
 // on the current active element.  Another way is to use a highly styled
 // button, but this gives me full control over the styling of the element.
@@ -35,10 +37,6 @@ function keydownHandler(event) {
       break;
   }
 }
-
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
 
 export default function Home(props) {
   const { initialData } = props; // data from SSG
@@ -73,20 +71,13 @@ export default function Home(props) {
       {pickData ?
         (<div className={styles.resultContainer}>
           {pickData.swimlanes.map(({ month, year, days }, index) => (
-            <div key={index} >
-              <h1 className={styles.swimlaneTitle}>{monthNames[month]} {year}</h1>
-              <ul className={styles.swimlane}>
-                {days.map(({ title, thumbnailUrl, date, url }, index) => {
-                  return <Card
-                    key={`${index}-${title}`}
-                    thumbnailUrl={thumbnailUrl}
-                    date={date}
-                    title={title}
-                    url={url}
-                  />
-                })}
-              </ul>
-            </div>
+            <FocusableSwimlane
+              key={index}
+              month={month}
+              year={year}
+              days={days}
+              index={index}
+            />
           ))}
         </div>)
         :
