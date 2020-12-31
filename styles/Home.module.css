@@ -34,10 +34,6 @@
   transform: scale(1.1);
 }
 
-.cardFocused {
-  border: 5px yellow dashed;
-}
-
 .card > span {
   position: absolute;
   top: 0;
