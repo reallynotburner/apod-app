@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import ImageOrThirdPartyVideo from '../../src/components/ImageOrThirdPartyVideo';
 import styles from '../../styles/Viewer.module.css';
 
 const INITIAL_DATE_QUERY = gql`
@@ -8,10 +9,9 @@ const INITIAL_DATE_QUERY = gql`
     getRecordByIsoDate (date: $date){
         date
         title
-        thumbnailUrl
         url
         explanation
-        id
+        media_type
     }
   }
 `;
@@ -19,17 +19,7 @@ const INITIAL_DATE_QUERY = gql`
 const Viewer = ({ initialData }) => {
   const router = useRouter();
   const { date } = router.query;
-  let visibleTimer = 0;
   const [visibleState, setVisibleState] = useState(false);
-
-  useEffect(() => {
-    // visibleTimer = setInterval(() => {
-    //   setVisibleState(!visibleState);
-    // }, 2000);
-    // return () => {
-    //   clearInterval(visibleTimer);
-    // };
-  });
   
   const { loading, error, data } = useQuery(INITIAL_DATE_QUERY, {
     skip: !!initialData || !date, // if SSG got the data, we can skip the call to get Home data
@@ -59,22 +49,30 @@ const Viewer = ({ initialData }) => {
     return <h1>Loading...</h1>;
   }
 
-  const { title, explanation, url} = data.getRecordByIsoDate;
+  if (!data.getRecordByIsoDate) {
+    return <h1>No Record Found :(</h1>
+  }
+
+  const { title, explanation, url, media_type } = data.getRecordByIsoDate;
   
   return (
 
     <div className={styles.viewerContainer}>
       <div className={styles.imageContainer}>
-        <img
-          alt={explanation}
-          src={url}
-          className={styles.image}
-          />
+        <ImageOrThirdPartyVideo
+          mediaType={media_type}
+          url={url}
+          title={title}
+        />
+
       </div>
 
-      <label for="vehicle1"> I have a dsfdsds</label>
-
-      <article className={`${styles.article} ${visibleState ? styles.articleVisible : ''}`}>
+      <article
+        className={`${styles.article} ${visibleState ? styles.articleVisible : ''}`}
+        style={{
+          pointerEvents: visibleState ? 'auto' : 'none'
+        }}
+        >
         <h1>{title}</h1>
         <p className={styles.explanation}>
           {explanation}
@@ -82,14 +80,15 @@ const Viewer = ({ initialData }) => {
       </article>
 
       <label className={styles.articleVisibleInputContainer}>
-      <input
-        className={styles.articleVisibleInput}
-        type="checkbox"
-        id="vehicle1"
-        name="vehicle1"
-        value="Bike"
-        onChange={e => setVisibleState(e.target.checked)}
-        /> {visibleState ? 'Hide' : 'Show'} Information
+        <input
+          className={styles.articleVisibleInput}
+          type="checkbox"
+          id="vehicle1"
+          name="vehicle1"
+          value="Bike"
+          onChange={e => setVisibleState(e.target.checked)}
+          />
+          {visibleState ? 'Hide' : 'Show'} Information
       </label>
     </div>
   )

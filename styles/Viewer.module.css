@@ -28,7 +28,7 @@
   background: rgba(41, 41, 41, 0.8);
   opacity: 0.0;
   transition: 1s;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .articleVisible {
