@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import styles from '../../styles/Home.module.css';
 
@@ -8,13 +9,20 @@ const Card = (props) => {
     thumbnailUrl,
     url
   } = props;
-
+  
   return (
-    <a className={styles.card} tabIndex={0} href={url}>
-      <img loading={'lazy'} src={thumbnailUrl} />
-      <div className={styles.cardOpacity}></div>
-      <span>{date} {title}</span>
-    </a>
+    <Link href={`/viewer/${date}`}>
+      <a
+        className={styles.card}
+        tabIndex={0}
+        href={url}
+        >
+        <img loading={'lazy'} src={thumbnailUrl} />
+        <div className={styles.cardOpacity}></div>
+        <span>{date} {title}</span>
+      </a>
+    </Link>
+
   );
 }
 

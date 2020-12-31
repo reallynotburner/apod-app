@@ -1,0 +1,59 @@
+.viewerContainer {
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.image {
+  width:100%;
+  height:100%;
+  object-fit: contain;
+}
+
+.imageContainer {
+  height: 100vh;
+  background: black;
+  position: relative;
+}
+
+.article {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  padding: 80px;
+  overflow-y: auto;
+  background: rgba(41, 41, 41, 0.8);
+  opacity: 0.0;
+  transition: 1s;
+  /* pointer-events: none; */
+}
+
+.articleVisible {
+  opacity: 1.0
+}
+
+.article > h1 {
+  font-size: xx-large;
+}
+
+.explanation {
+  font-size: x-large;
+}
+
+.articleVisibleInputContainer {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.articleVisibleInput {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+}
+

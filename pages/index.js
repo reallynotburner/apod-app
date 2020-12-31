@@ -59,6 +59,7 @@ export default function Home(props) {
   }, [null]);
 
   const pickData = data ? data : initialData?.data;
+
   console.log('Home Render!');
 
   return (
