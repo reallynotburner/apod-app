@@ -62,8 +62,6 @@ export default function Home(props) {
 
   console.log('Home Render!');
 
-  debugger;
-
   return (
     <div className={styles.container}>
       <Head>

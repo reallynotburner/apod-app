@@ -1,5 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import styles from '../../styles/Viewer.module.css';
 
 const INITIAL_DATE_QUERY = gql`
   query GetThisDate ($date: String) {
@@ -9,6 +11,7 @@ const INITIAL_DATE_QUERY = gql`
         thumbnailUrl
         url
         explanation
+        id
     }
   }
 `;
@@ -16,6 +19,17 @@ const INITIAL_DATE_QUERY = gql`
 const Viewer = ({ initialData }) => {
   const router = useRouter();
   const { date } = router.query;
+  let visibleTimer = 0;
+  const [visibleState, setVisibleState] = useState(false);
+
+  useEffect(() => {
+    // visibleTimer = setInterval(() => {
+    //   setVisibleState(!visibleState);
+    // }, 2000);
+    // return () => {
+    //   clearInterval(visibleTimer);
+    // };
+  });
   
   const { loading, error, data } = useQuery(INITIAL_DATE_QUERY, {
     skip: !!initialData || !date, // if SSG got the data, we can skip the call to get Home data
@@ -47,20 +61,38 @@ const Viewer = ({ initialData }) => {
 
   const { title, explanation, url} = data.getRecordByIsoDate;
   
-  console.log('What is my date?', date, data);
-
   return (
-    <article>
-      <h1>{title}</h1>
-      <img src={url}></img>
-      <p>
-        {explanation}
-      </p>
-    </article>
+
+    <div className={styles.viewerContainer}>
+      <div className={styles.imageContainer}>
+        <img
+          alt={explanation}
+          src={url}
+          className={styles.image}
+          />
+      </div>
+
+      <label for="vehicle1"> I have a dsfdsds</label>
+
+      <article className={`${styles.article} ${visibleState ? styles.articleVisible : ''}`}>
+        <h1>{title}</h1>
+        <p className={styles.explanation}>
+          {explanation}
+        </p>
+      </article>
+
+      <label className={styles.articleVisibleInputContainer}>
+      <input
+        className={styles.articleVisibleInput}
+        type="checkbox"
+        id="vehicle1"
+        name="vehicle1"
+        value="Bike"
+        onChange={e => setVisibleState(e.target.checked)}
+        /> {visibleState ? 'Hide' : 'Show'} Information
+      </label>
+    </div>
   )
 }
-
-
-
 
 export default Viewer;
