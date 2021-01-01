@@ -37,7 +37,6 @@ const Card = (props) => {
         <span>{date} {title}</span>
       </a>
     </Link>
-
   );
 }
 
