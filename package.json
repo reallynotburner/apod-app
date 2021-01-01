@@ -12,7 +12,7 @@
     "@noriginmedia/react-spatial-navigation": "https://github.com/reallynotburner/react-spatial-navigation.git",
     "dot-env": "^0.0.1",
     "graphql": "^15.3.0",
-    "next": "9.5.3",
+    "next": "^10.0.4",
     "react": "16.13.1",
     "react-dom": "16.13.1"
   },
