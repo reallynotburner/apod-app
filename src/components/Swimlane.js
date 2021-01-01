@@ -1,5 +1,5 @@
 import withFocusable from "@noriginmedia/react-spatial-navigation/dist/withFocusable";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from '../../styles/Home.module.css';
 import Card from "./Card";
 
@@ -28,7 +28,7 @@ const Swimlane = ({ month, year, days, index, focused, setFocus, hasFocusedChild
   return (
     <div key={index} >
       <h1 className={styles.swimlaneTitle}>{monthNames[month]} {year}</h1>
-      <ul className={styles.swimlane}>
+      <Carousel className={styles.swimlane}>
         {days.map(({ title, thumbnailUrl, date, url }, idx) => {
           return <FocusableCard
             key={`${idx}-${title}`}
@@ -39,9 +39,68 @@ const Swimlane = ({ month, year, days, index, focused, setFocus, hasFocusedChild
             url={url}
           />
         })}
-      </ul>
+      </Carousel>
     </div>
   );
 };
+
+const Carousel = ({children, className}) => {
+  let containerRef = useRef(null);
+  
+  const focusListener = (event) => {
+    const container = containerRef.current;
+    const childNodes = container.childNodes;
+    const length = childNodes.length;
+    const target = event.target;    
+    const overallContainerWidth = container.scrollWidth;
+    const containerVisibleWidth = container.clientWidth;
+
+    const maxDelta = overallContainerWidth - containerVisibleWidth;
+    const delta = length > 1 ? maxDelta / (length - 1) : 0;
+
+    let targetIndex = 0;
+    for (let i = 0; i < length; i++) {
+      if (target === childNodes[i]) {
+        targetIndex = i;
+        break;
+      }
+    }
+
+    container.scrollTo(delta * targetIndex,0);
+  };
+
+  const subscribe = () => {
+    if (containerRef && containerRef.current) {
+      const container = containerRef.current;
+      const children = container.childNodes;
+      const length = children.length;
+      for (let i = 0; i < length; i++) {
+        children[i].addEventListener('focus', focusListener);
+      }
+    } 
+  };
+
+  const unsubscribe = () => {
+    if (containerRef && containerRef.current) {
+      const container = containerRef.current;
+      const children = container.childNodes;
+      const length = children.length;
+      for (let i = 0; i < length; i++) {
+        children[i].removeEventListener('focus', focusListener);
+      }
+    } 
+  };
+
+  useEffect(() => {
+    subscribe();
+    return unsubscribe;
+  });
+
+  return (
+    <div ref={containerRef} className={className}>
+      {children}
+    </div>
+  );
+}
 
 export default Swimlane;

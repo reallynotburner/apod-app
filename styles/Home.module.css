@@ -1,6 +1,6 @@
 .container {
-  padding: 20px 0px 20px 20px;
-  overflow: scroll;
+  padding-left: 40px;
+  padding-top: 30px;
 }
 
 /*
@@ -30,8 +30,9 @@
 }
 
 .card:focus {
-  border-color: #0070f3;
+  border-color: #777777;
   transform: scale(1.1);
+  outline: none;
 }
 
 .card > span {
@@ -69,11 +70,16 @@
   display: flex;
   padding: 20px;
   flex-direction: row;
-  overflow-x: scroll;
+  overflow-x: auto;
   scroll-behavior: smooth;
 }
 
 @media only screen and (max-width: 800px) {
+  .container {
+    padding-left: 0px;
+    padding-top: 0px;
+  }
+
   .swimlane {
     flex-direction: column;
   }
